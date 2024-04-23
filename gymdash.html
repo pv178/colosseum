@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="dashboard.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Colosseum Gym</title>
@@ -111,11 +113,11 @@
     <table id="logData">
       <thead>
         <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Expiry Date</th>
-          <th>Membership Type</th>
-          <th>Mail</th>
+          <th onclick="sortTable('logData', 0)">ID</th>
+          <th onclick="sortTable('logData', 1)">Name</th>
+          <th onclick="sortTable('logData', 2)">Expiry Date</th>
+          <th onclick="sortTable('logData', 3)">Membership Type</th>
+          <th onclick="sortTable('logData', 4)">Mail</th>
           <th>Status</th>
         </tr>
       </thead>
@@ -223,6 +225,24 @@
       }
     }
   }
+  
+      // Add the filter dropdown for the 'Status' column
+      window.onload = function() {
+      // Create and append the filter dropdown
+      var statusFilter = document.createElement('select');
+      statusFilter.innerHTML = `
+        <option value="all">All</option>
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+      `;
+      statusFilter.onchange = function() {
+        filterRowsByStatus('logData', this.value);
+      };
+
+      // Append the filter dropdown to the search container or another appropriate place
+      document.querySelector('.search-container').appendChild(statusFilter);
+    };
+    
 </script>
 </body>
 </html>
