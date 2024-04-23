@@ -160,28 +160,38 @@
     }
 
     function loadMembersList() {
-      $.get('https://fotopoklon.com/API/fetch.php', function(data) {
-        $('#logTable').hide();
-        $('#logData').show();
-        $('#logData tbody').empty();
-        for (var i = 0; i < data.length; i++) {
-          var member = data[i];
-          var expiryDate = new Date(member.ExpiryDate);
-          var today = new Date();
-          var status = (expiryDate >= today) ? '<span class="inactive">INACTIVE</span>' : '<span class="active">ACTIVE</span>';
-          $('#logData tbody').append(`
-            <tr>
-              <td>${member.ID}</td>
-              <td>${member.Name}</td>
-              <td>${member.ExpiryDate}</td>
-              <td>${member.MembershipType}</td>
-              <td>${member.Mail}</td>
-              <td>${status}</td>
-            </tr>
-          `);
-        }
-      });
-    }
+  $.get('https://fotopoklon.com/API/fetch.php', function(data) {
+    $('#logTable').hide();
+    $('#logData').show();
+    $('#logData tbody').empty();
+
+    const today = new Date(); // Current date and time
+    today.setHours(0, 0, 0, 0); // Set time to midnight to ensure the whole day is compared
+
+    data.forEach((member) => {
+      const expiryDate = new Date(member.ExpiryDate);
+      let status = '';
+
+      // Compare only the dates, ignoring time
+      if (expiryDate.getTime() >= today.getTime()) {
+        status = '<span class="active">ACTIVE</span>';
+      } else {
+        status = '<span class="inactive">INACTIVE</span>';
+      }
+
+      $('#logData tbody').append(`
+        <tr>
+          <td>${member.ID}</td>
+          <td>${member.Name}</td>
+          <td>${expiryDate.toDateString()}</td> <!-- Optionally convert to a readable format -->
+          <td>${member.MembershipType}</td>
+          <td>${member.Mail}</td>
+          <td>${status}</td>
+        </tr>
+      `);
+    });
+  });
+}
 
     function searchTable() {
     var input, filter, table, tr, td, i, j, txtValue;
